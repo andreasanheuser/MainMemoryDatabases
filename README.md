@@ -1,4 +1,5 @@
 Student Project University of Mannheim
 
 Author: Andreas Anheuser
-	Magnus Mueller	
+		Magnus Mueller	
+		Florian Pethig
