@@ -4,30 +4,30 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <exception>
+#include <utility>
 
 namespace tools {
 
-std::vector<std::string> tokenize(const std::string& s, char delim) {
-  std::vector<std::string> elems;
-  std::stringstream ss(s);
-  std::string item;
-  while (std::getline(ss, item, delim)) {
-    elems.push_back(item);
+std::vector<std::string> tokenize(const std::string& aString, const char aDelim) {
+  std::vector<std::string> lElems;
+  std::stringstream lss(aString);
+  std::string lItem;
+  while (std::getline(lss, lItem, aDelim)) {
+    lElems.push_back(std::move(lItem));
   }
-  return elems;
+  return lElems;
 }
 
-std::string trim(const std::string& str, const std::string& whitespace = " \t")
+std::string trim(const std::string& aString, const std::string& aWhitespace = " \t")
 {
-  const auto strBegin = str.find_first_not_of(whitespace);
-  if (strBegin == std::string::npos)
+  const auto lStrBegin = aString.find_first_not_of(aWhitespace);
+  if (lStrBegin == std::string::npos)
     return ""; // no content
 
-  const auto strEnd = str.find_last_not_of(whitespace);
-  const auto strRange = strEnd - strBegin + 1;
+  const auto lStrEnd = aString.find_last_not_of(aWhitespace);
+  const auto lStrRange = lStrEnd - lStrBegin + 1;
 
-  return str.substr(strBegin, strRange);
+  return aString.substr(lStrBegin, lStrRange);
 }
 
 }
