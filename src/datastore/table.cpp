@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "table.h"
-#include "column.cpp"
+#include "datejd.h"
 #include "../tools/stringExtensions.h"
 
 namespace datastore {
@@ -29,7 +29,7 @@ Table::Table(const TableDef& aTableDef)
         _columns.push_back(new Column<std::string>(c.getColumnName(), ColumnDef::ColumnType::TEXT));
         break;
       case ColumnDef::ColumnType::DATE:
-        _columns.push_back(new Column<Date>(c.getColumnName(), ColumnDef::ColumnType::DATE));
+        _columns.push_back(new Column<DateJd>(c.getColumnName(), ColumnDef::ColumnType::DATE));
         break;
       default: throw "Unknown type";
     }

@@ -38,11 +38,11 @@ namespace tools {
    	
    	
 // Print results
-	void Measure::printMeasures(double startTime, double endTime){
+	void Measure::printMeasures(double startTime, double endTime, const std::string& aFilepath){
 		double totalTime = endTime - startTime;
 
   		long begin_file, end_file;
-  		ifstream file_size ("/Users/andreasanheuser/Documents/UniMannheim/MainMemoryDB/tpch-dbgen/generatedFiles/lineitem.tbl");
+  		ifstream file_size (aFilepath);
   		begin_file = file_size.tellg();
   		file_size.seekg (0, ios::end);
   		end_file = file_size.tellg();

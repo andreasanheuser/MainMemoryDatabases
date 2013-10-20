@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "column.h"
-#include "tableSchema.cpp"
+#include "datejd.h"
+#include "../tools/stringExtensions.h"
 
 namespace datastore {
   ColumnBase::ColumnBase(const std::string& aColumnName)  
@@ -59,10 +60,15 @@ namespace datastore {
   {
     return aToken[0];
   }
+
   template <>
-  Date Column<Date>::convertToColumnType(const std::string& aToken)
+  DateJd Column<DateJd>::convertToColumnType(const std::string& aToken)
   {
-    return Date{aToken}; 
+    std::vector<std::string> tokens = tools::tokenize(aToken, '-');
+    int lYear = std::stoi(tokens[0]);
+    int lMonth = std::stoi(tokens[1]);
+    int lDay = std::stoi(tokens[2]);
+    return DateJd{lYear, lMonth, lDay}; 
   }
   // end of template specializations
 
@@ -79,4 +85,10 @@ namespace datastore {
     return aOutputStream;
   }
 
+  // explicit template instantiation to avoid linking errors
+  template class Column<int>;
+  template class Column<double>;
+  template class Column<char>;
+  template class Column<std::string>;
+  template class Column<DateJd>;
 }

@@ -32,7 +32,7 @@ namespace tools {
    	double endMeasure();
    	
 // Print results
-	void printMeasures(double, double);
+	void printMeasures(double, double, const std::string&);
 	};
 
 }

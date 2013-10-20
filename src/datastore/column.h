@@ -63,7 +63,6 @@ namespace datastore {
       ColumnDef::ColumnType _columnType;
   };
 
-  template <typename T>
   std::ostream& operator<< (std::ostream& aOutputStream, const ColumnBase& aColumnBase);
 }
 
