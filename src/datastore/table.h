@@ -16,6 +16,7 @@ namespace datastore {
       ~Table();
 
       bool loadDataFromFile(const std::string& aFd);
+      bool insertTuple(const std::string& aTuple, const char aDelim);
       void printDataToScreen() const;
       int size() const { return _columns[0] ? _columns[0]->size() : -1; }
 

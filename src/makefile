@@ -3,11 +3,11 @@ OBJS = $(addprefix $(OBJDIR)/, main.o table.o column.o measure.o stringExtension
 OUT = database
 
 CC = g++
-# for compilation under OSX
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Darwin)
-	CC = g++-4.8
-endif
+# for compilation under OSX - no longer needed with OSX 10.9
+#UNAME_S := $(shell uname -s)
+#ifeq ($(UNAME_S),Darwin)
+#	CC = g++
+#endif
 
 CFLAGS = -std=c++0x -c -Wall -O3
 LDFLAGS = -Wall

@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "table.h"
 #include "datejd.h"
@@ -51,15 +52,30 @@ bool Table::loadDataFromFile(const std::string& aFd) {
 
   std::string lCurrentLine;
   while (getline(lIfs, lCurrentLine)) {
-    std::vector<std::string> lTokens = tools::tokenize(lCurrentLine, '|');
-
-    for (unsigned i = 0; i < _columns.size(); ++i) {
+    //std::vector<std::string> lTokens = tools::tokenize(lCurrentLine, '|');
+    insertTuple(lCurrentLine, '|');
+  }
+/*    for (unsigned i = 0; i < _columns.size(); ++i) {
       if(!_columns[i]->insertValue(lTokens[i]))
         throw "Fileload failed"; 
     }
   }
-
+*/
   lIfs.close();
+
+  return true;
+}
+
+bool Table::insertTuple(const std::string& aTuple, const char aDelim)
+{
+  std::stringstream lss(aTuple);
+  std::string lItem;
+
+  int i{0};
+  while (std::getline(lss, lItem, aDelim)) {
+    if(!_columns[i++]->insertValue(lItem))
+      throw "Fileload failed";
+  }
 
   return true;
 }
