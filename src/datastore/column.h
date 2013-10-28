@@ -6,6 +6,8 @@
 #include <iostream>
 #include "tableSchema.h"
 
+class SimpleCharContainer;
+
 namespace datastore {
 
   /*
@@ -36,6 +38,7 @@ namespace datastore {
       ColumnBase& operator=(const ColumnBase&) = delete;
   };
 
+  std::ostream& operator<< (std::ostream& aOutputStream, const ColumnBase& aColumnBase);
 
   /*
    * Implementation for columns of specific types 
@@ -46,7 +49,7 @@ namespace datastore {
       Column(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType);
       ~Column();
 
-      bool insertValue(const std::string& aValue) override;
+      virtual bool insertValue(const std::string& aValue) override;
       int size() const override { return _attrValues.size(); }
       ColumnDef::ColumnType getColumnType() const override { return _columnType; }
 
@@ -58,12 +61,24 @@ namespace datastore {
       // converts string to type of specific column
       static T convertToColumnType(const std::string& aToken);
 
-    private:
+    protected:
       std::vector<T> _attrValues;
       ColumnDef::ColumnType _columnType;
   };
 
-  std::ostream& operator<< (std::ostream& aOutputStream, const ColumnBase& aColumnBase);
+  /*
+   * Text columns store their data in a char container
+   */
+  class TextColumn : public Column<const char *> {
+    public:
+      TextColumn(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType, unsigned aChunkSize);
+      ~TextColumn();
+
+      bool insertValue(const std::string& aValue) override;
+
+    private:
+      SimpleCharContainer* _textStorage;
+  };
 }
 
 #endif

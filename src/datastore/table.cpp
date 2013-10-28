@@ -27,7 +27,8 @@ Table::Table(const TableDef& aTableDef)
         _columns.push_back(new Column<char>(c.getColumnName(), ColumnDef::ColumnType::FLAG));
         break;
       case ColumnDef::ColumnType::TEXT:
-        _columns.push_back(new Column<std::string>(c.getColumnName(), ColumnDef::ColumnType::TEXT));
+//        _columns.push_back(new Column<const char*>(c.getColumnName(), ColumnDef::ColumnType::TEXT));
+        _columns.push_back(new TextColumn(c.getColumnName(), ColumnDef::ColumnType::TEXT, 4096));
         break;
       case ColumnDef::ColumnType::DATE:
         _columns.push_back(new Column<DateJd>(c.getColumnName(), ColumnDef::ColumnType::DATE));

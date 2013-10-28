@@ -28,7 +28,7 @@ int main(const int argc, const char * argv[]) {
 
   lm.printMeasures(lStart, lEnd, lFile);
 
-  //t.printDataToScreen();
+  //lt.printDataToScreen();
 
   return 0;
 }

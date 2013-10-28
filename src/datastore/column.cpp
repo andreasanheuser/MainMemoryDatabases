@@ -1,9 +1,14 @@
 #include <stdexcept>
 #include "column.h"
+#include "simplecharcontainer.h"
 #include "datejd.h"
 #include "../tools/stringExtensions.h"
 
 namespace datastore {
+
+  /*
+   * Implementation class ColumnBase
+   */
   ColumnBase::ColumnBase(const std::string& aColumnName)  
     : _columnName(aColumnName)
   {
@@ -13,6 +18,9 @@ namespace datastore {
   {
   }
 
+  /*
+   * Implementation class Column
+   */
   template <typename T>
   Column<T>::Column(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType) 
     : ColumnBase(aColumnName), _columnType(aColumnType)
@@ -70,6 +78,12 @@ namespace datastore {
     int lDay = std::stoi(tokens[2]);
     return DateJd{lYear, lMonth, lDay}; 
   }
+
+  template <>
+  const char* Column<const char*>::convertToColumnType(const std::string& aToken)
+  {
+    return aToken.c_str();
+  }
   // end of template specializations
 
   template <typename T>
@@ -85,10 +99,41 @@ namespace datastore {
     return aOutputStream;
   }
 
+  /*
+   * Implementation class TextColumn
+   */
+
+  TextColumn::TextColumn(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType, unsigned aChunkSize) 
+    : ColumnBase(aColumnName),
+      Column<const char*>(aColumnName, aColumnType),
+      _textStorage(new SimpleCharContainer(aChunkSize))
+  {
+  }
+
+  TextColumn::~TextColumn()
+  {
+    delete _textStorage;
+  }
+
+  bool TextColumn::insertValue(const std::string& aValue)
+  {
+    _attrValues.push_back(_textStorage->insert(&(*aValue.begin()), &(*aValue.end())));
+    /*
+    try {
+      _attrValues.push_back(convertToColumnType(aValue));
+    }
+    catch (const std::invalid_argument& ia) {
+      return false;
+    }
+    */
+    return true;
+  }
+
   // explicit template instantiation to avoid linking errors
   template class Column<int>;
   template class Column<double>;
   template class Column<char>;
-  template class Column<std::string>;
+//  template class Column<std::string>;
+//  template class TextColumn<const char*>;
   template class Column<DateJd>;
 }
