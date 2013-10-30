@@ -21,6 +21,7 @@ namespace datastore {
       // inserts value at end of column
       // converts string to type of specific column
       virtual bool insertValue(const std::string& aValue) = 0;
+      virtual bool insertValue(const char* begin, const char* end) = 0;
 
       // returns the number of elements in this column
       virtual int size() const = 0;
@@ -50,6 +51,8 @@ namespace datastore {
       ~Column();
 
       virtual bool insertValue(const std::string& aValue) override;
+      virtual bool insertValue(const char* begin, const char* end) override;
+
       int size() const override { return _attrValues.size(); }
       ColumnDef::ColumnType getColumnType() const override { return _columnType; }
 
@@ -60,6 +63,7 @@ namespace datastore {
     private:
       // converts string to type of specific column
       static T convertToColumnType(const std::string& aToken);
+      static T convertToColumnType(const char* begin, const char* end);
 
     protected:
       std::vector<T> _attrValues;
@@ -75,6 +79,7 @@ namespace datastore {
       ~TextColumn();
 
       bool insertValue(const std::string& aValue) override;
+      bool insertValue(const char* begin, const char* end);
 
     private:
       SimpleCharContainer* _textStorage;

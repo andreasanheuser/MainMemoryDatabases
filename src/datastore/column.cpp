@@ -45,6 +45,18 @@ namespace datastore {
   }
 
   template <typename T>
+  bool Column<T>::insertValue(const char* begin, const char* end)
+  {
+    try {
+      _attrValues.push_back(convertToColumnType(begin, end));
+    }
+    catch (const std::invalid_argument& ia) {
+      return false;
+    }
+    return true;
+  }
+
+  template <typename T>
   T Column<T>::convertToColumnType(const std::string& aToken)
   {
     return aToken;
@@ -86,6 +98,38 @@ namespace datastore {
   }
   // end of template specializations
 
+  // mmap stuff
+  template <>
+  int Column<int>::convertToColumnType(const char* begin, const char* end)
+  {
+    return std::stoi(std::string(begin, end-begin));
+  }
+
+  template <>
+  double Column<double>::convertToColumnType(const char* begin, const char* end)
+  {
+    return std::stod(std::string(begin, end-begin));
+  }
+
+  template <>
+  char Column<char>::convertToColumnType(const char* begin, const char* end)
+  {
+    return begin[0];
+  }
+
+  template <>
+  DateJd Column<DateJd>::convertToColumnType(const char* begin, const char* end)
+  {
+    return convertToColumnType(std::string(begin, end-begin));
+  }
+
+  template <>
+  const char* Column<const char*>::convertToColumnType(const char* begin, const char* end)
+  {
+    return std::string(begin, end-begin).c_str();
+  }
+  // end mmap stuff
+
   template <typename T>
   void Column<T>::print(std::ostream& aOutputStream) const
   {
@@ -118,14 +162,12 @@ namespace datastore {
   bool TextColumn::insertValue(const std::string& aValue)
   {
     _attrValues.push_back(_textStorage->insert(&(*aValue.begin()), &(*aValue.end())));
-    /*
-    try {
-      _attrValues.push_back(convertToColumnType(aValue));
-    }
-    catch (const std::invalid_argument& ia) {
-      return false;
-    }
-    */
+    return true;
+  }
+
+  bool TextColumn::insertValue(const char* begin, const char* end)
+  {
+    _attrValues.push_back(_textStorage->insert(begin, end));
     return true;
   }
 
@@ -133,7 +175,5 @@ namespace datastore {
   template class Column<int>;
   template class Column<double>;
   template class Column<char>;
-//  template class Column<std::string>;
-//  template class TextColumn<const char*>;
   template class Column<DateJd>;
 }
