@@ -71,7 +71,7 @@ namespace datastore {
    */
   class TextColumn : public Column<const char *> {
     public:
-      TextColumn(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType, unsigned aChunkSize);
+      TextColumn(const std::string& aColumnName, unsigned aChunkSize);
       ~TextColumn();
 
       bool insertValue(const std::string& aValue) override;

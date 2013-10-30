@@ -103,9 +103,9 @@ namespace datastore {
    * Implementation class TextColumn
    */
 
-  TextColumn::TextColumn(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType, unsigned aChunkSize) 
+  TextColumn::TextColumn(const std::string& aColumnName, unsigned aChunkSize) 
     : ColumnBase(aColumnName),
-      Column<const char*>(aColumnName, aColumnType),
+      Column<const char*>(aColumnName, ColumnDef::ColumnType::TEXT),
       _textStorage(new SimpleCharContainer(aChunkSize))
   {
   }

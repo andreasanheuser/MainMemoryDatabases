@@ -28,7 +28,7 @@ Table::Table(const TableDef& aTableDef)
         break;
       case ColumnDef::ColumnType::TEXT:
 //        _columns.push_back(new Column<const char*>(c.getColumnName(), ColumnDef::ColumnType::TEXT));
-        _columns.push_back(new TextColumn(c.getColumnName(), ColumnDef::ColumnType::TEXT, 4096));
+        _columns.push_back(new TextColumn(c.getColumnName(), 4096));
         break;
       case ColumnDef::ColumnType::DATE:
         _columns.push_back(new Column<DateJd>(c.getColumnName(), ColumnDef::ColumnType::DATE));
@@ -53,15 +53,8 @@ bool Table::loadDataFromFile(const std::string& aFd) {
 
   std::string lCurrentLine;
   while (getline(lIfs, lCurrentLine)) {
-    //std::vector<std::string> lTokens = tools::tokenize(lCurrentLine, '|');
     insertTuple(lCurrentLine, '|');
   }
-/*    for (unsigned i = 0; i < _columns.size(); ++i) {
-      if(!_columns[i]->insertValue(lTokens[i]))
-        throw "Fileload failed"; 
-    }
-  }
-*/
   lIfs.close();
 
   return true;
