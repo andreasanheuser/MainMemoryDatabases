@@ -36,10 +36,9 @@ namespace datastore {
 	
 
 		void Database::readDBInfo(const std::string& adbPath)
-		: _dbPath(adbPath)
 		{
 			std::vector <std::string> table;
-  			std::ifstream myfile (_dbPath);
+  			std::ifstream myfile (adbPath);
          	if (myfile.is_open()) {
          		string atableLine;
     			while ( getline (myfile, atableLine) ){

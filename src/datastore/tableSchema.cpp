@@ -12,7 +12,12 @@ namespace datastore {
     : _tabName(aTabName), _columnDefs(aColumnDefs)
   {
   }
-
+/*
+  DatabaseDef::DatabaseDef(const std::string& aDbName, const std::map<TableDef>& aTableDefs)
+	: _dbDefName(aDbName), _tableDefs(aTableDefs)
+  {
+  }
+*/
   TPCH::TPCH()
   {
 
@@ -40,6 +45,8 @@ namespace datastore {
                               ColumnDef("L_COMMENT", ColumnDef::ColumnType::TEXT)};
     TableDef ltd2{"Lineitem", lcd2};
     _tableDefs.insert(std::pair<std::string, TableDef>("Lineitem", ltd2));
+    
+//  	std::vector<DatabaseDef> ldd = {"tpch@0_1", lcd}; 
 
   }
 }

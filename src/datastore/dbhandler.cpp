@@ -46,8 +46,8 @@ namespace datastore {
   			int dbNumber;
   			cin >> dbNumber;
   
-  			Database ldb
-  			ldb.readDBInfo(dbName[dbNumber-1],dbPath[dbNumber-1]);
+  			Database ld;
+  			ld.readDBInfo(dbPath[dbNumber-1]);
   		}
 
 }

@@ -1,8 +1,8 @@
 OBJDIR = ../obj
-OBJS = $(addprefix $(OBJDIR)/, main.o table.o column.o measure.o stringExtensions.o tableSchema.o datejd.o simplecharcontainer.o)
+OBJS = $(addprefix $(OBJDIR)/, main.o table.o column.o measure.o stringExtensions.o tableSchema.o datejd.o simplecharcontainer.o database.o dbhandler.o)
 OUT = database
 
-CC = g++
+CC = g++-4.8
 # for compilation under OSX - no longer needed with OSX 10.9
 #UNAME_S := $(shell uname -s)
 #ifeq ($(UNAME_S),Darwin)
@@ -20,7 +20,7 @@ all: $(OUT)
 $(OUT): $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $(OUT)
 
-$(OBJDIR)/main.o: main.cpp datastore/table.h tools/measure.h
+$(OBJDIR)/main.o: main.cpp datastore/dbhandler.h
 	$(CC) $(CFLAGS) main.cpp -o $(OBJDIR)/main.o
 
 $(OBJDIR)/table.o: datastore/table.cpp datastore/table.h datastore/column.cpp datastore/column.h
@@ -43,6 +43,13 @@ $(OBJDIR)/datejd.o: datastore/datejd.cpp
 
 $(OBJDIR)/simplecharcontainer.o: datastore/simplecharcontainer.cpp
 	$(CC) $(CFLAGS) datastore/simplecharcontainer.cpp -o $(OBJDIR)/simplecharcontainer.o
+
+$(OBJDIR)/database.o: datastore/database.cpp datastore/table.h tools/measure.h
+	$(CC) $(CFLAGS) datastore/database.cpp -o $(OBJDIR)/database.o
+
+$(OBJDIR)/dbhandler.o: datastore/dbhandler.cpp datastore/database.h
+	$(CC) $(CFLAGS) datastore/dbhandler.cpp -o $(OBJDIR)/dbhandler.o
+
 
 clean:
 	@rm -f ../obj/*.o database

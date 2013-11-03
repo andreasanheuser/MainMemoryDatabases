@@ -19,7 +19,8 @@ namespace datastore {
 //	std::vector <Table*> _tables;
 		
 	public:
-	Database(const DatabaseDef& aDatabaseDef);
+//	Database(const DatabaseDef& aDatabaseDef);
+	Database();
 	~Database();
 	
 	void addTable(const std::string&, const std::string&);

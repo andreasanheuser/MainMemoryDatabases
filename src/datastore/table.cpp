@@ -19,6 +19,7 @@
 
 namespace datastore {
 
+
 Table::Table(const TableDef& aTableDef)
   : _tableName(aTableDef.getTableName())
 {
@@ -138,11 +139,14 @@ bool Table::insertTuple(const std::string& aTuple, const char aDelim)
 }
 
 void Table::printDataToScreen() const {
+/*  
   std::cout << "Table: " << _tableName << ", Records: " << size() << std::endl;
   for (ColumnBase* b : _columns) {
     std::cout << (*b);
   }
   std::cout << std::endl;
+*/
+  std::cout << "Records: " << size() << std::endl;
 }
 
 }

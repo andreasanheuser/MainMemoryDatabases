@@ -1,11 +1,12 @@
-#include "datastore/table.h"
-#include <chrono>
+//#include "datastore/table.h"
+//#include <chrono>
 #include <fstream>
+#include "datastore/dbhandler.h"
 
 using namespace std;
 using namespace datastore;
 
-
+/*
 double getFilesize(const std::string& aFilepath) {
   long begin_file, end_file;  
   std::ifstream file_size (aFilepath);
@@ -15,6 +16,7 @@ double getFilesize(const std::string& aFilepath) {
   file_size.close();
   return (end_file-begin_file)/1048576.00;
 }
+
 
 int main(const int argc, const char * argv[]) {
 
@@ -43,3 +45,21 @@ int main(const int argc, const char * argv[]) {
 
   return 0;
 }
+
+*/
+
+int main(const int argc, const char * argv[]) {
+
+  if (argc != 2) {
+    cout << "Wrong usage! Run as ./database FilePath" << endl;
+    return 1;
+  }
+
+  //string lFile("/Users/florianpethig/Documents/UniMannheim/TP500/Files/database_files.txt");
+
+  
+  DBHandler ldb;
+  ldb.openDatabase(argv[1]);
+    
+  return 0;
+  }
