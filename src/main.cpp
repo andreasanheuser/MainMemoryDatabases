@@ -17,10 +17,19 @@ double getFilesize(const std::string& aFilepath) {
 
 int main(const int argc, const char * argv[]) {
 
-  if (argc != 3) {
-    cout << "Wrong usage! Run as ./database TableName FilePath" << endl;
-    return 1;
+  std::string lDatabaseDefinitions{"../schemata/databases.txt"};
+
+  // user defined own databaseDefinitions file
+  if (argc == 2) {
+    lDatabaseDefinitions = argv[1];
   }
+
+  DatabaseHandler databaseHandler{lDatabaseDefinitions};
+  return 0;
+}
+
+
+/*
 
   TPCH lTpch;
   Table lt(lTpch.getTableDef(string(argv[1])));
