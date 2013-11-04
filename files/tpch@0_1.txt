@@ -1,0 +1,4 @@
+Lineitem
+/Users/florianpethig/Documents/UniMannheim/TP500/files/tpch@0_1/lineitem.tbl
+Region
+/Users/florianpethig/Documents/UniMannheim/TP500/files/tpch@0_1/region.tbl
