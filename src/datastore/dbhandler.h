@@ -9,6 +9,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "database.h"
+
 namespace datastore {
 
 	class DBHandler {

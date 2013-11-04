@@ -15,63 +15,34 @@ using namespace std;
 namespace datastore {
 
 		DBHandler::DBHandler(const std::string& aDatabaseDefinitions)
-                {
-                  std::ifstream ifs{aDatabaseDefinitions, std::ifstream::in};
+        {
+                  std::ifstream ifs(aDatabaseDefinitions, std::ifstream::in);
                   std::string currentline;
                   while(std::getline(ifs, currentline)){
                     std::vector<std::string> tokens = tools::tokenize(currentline,';');
                     _databases.push_back(new Database(tokens[0]));
-                    std::ifstream ifs2{tokens[1], std::ifstream::in};
-                    while(std::getline(ifs2, currentline)){
+                    std::ifstream ifs2(tokens[1], std::ifstream::in);
+                    while(std::getline(ifs2, currentline))
+                    {
                       tokens = tools::tokenize(currentline, ';');
                       TableDef lTableDef{tokens[0], tokens[1]};
-                      _databases.back()->addTable(lTableDef);
-                      _databases.back()->loadDataIntoTable(tokens[0], tokens[2]);
-                  }	
+                      if(true == _databases.back()->addTable(lTableDef))
+                      {
+                      	_databases.back()->loadDataIntoTable(tokens[0], tokens[2]);
+                      }
+                      else
+                      {
+                      	std::cout << "unable to open: " << tokens[0] << std::endl;
+                      }
+                  	}	
                 }
+        }
 
-		DBHandler::~DBHandler(){
-                  for(auto d : _databases){
+		DBHandler::~DBHandler()
+		{
+            for(auto d : _databases){
                     delete d;
-                  }
-                }
-
-                /*
-  		void DBHandler::createDatabase(const std::string& afilePath){
-  			std::vector <std::string> dbName;
-    		std::vector <std::string> dbPath;
-  			int lines_read = 0;
-  			string line;
-  			ifstream myfile (afilePath);
-  			if (myfile.is_open()){
-    			while ( getline (myfile,line) ){
-      				if (lines_read % 2 == 0){
-        				dbName.push_back(line);
-      				}
-      				else{
-        				dbPath.push_back(line);
-      				}
-      				++ lines_read;
-    			}
-    			myfile.close();
-  			}
-  			else cout << "Unable to open file"; 
-
-			int z = 1;
-			for (auto i : dbName) {
-   				cout << z << ". " << i << endl;
-   				++z;
-  			}
-
-  			cout << "Please select database:" << endl;
-  			int dbNumber;
-  			cin >> dbNumber;
-  
-  			Database(dbName[dbNumber-1],dbPath[dbNumber-1]);
-
-  		}
-                */
-
-                void 
+            }
+        }
 
 }

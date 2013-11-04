@@ -4,39 +4,26 @@
 #include <vector>
 #include <string>
 
+#include "tableSchema.h"
+#include "table.h"
+
 class Table;
 
 namespace datastore {
 
   class Database {
     public:
-//      Database(const DatabaseDef& aDatabaseDef);
       Database(const std::string& aDatabaseName);
       ~Database();
 
-      void addTable(const TableDef& aTableDef);
-
+      bool addTable(const TableDef& aTableDef);
+	  void loadDataIntoTable(const std::string&, const std::string&);
+    
     private:
       std::string _dbName;
       std::vector<Table*> _tables;
   };
-
-	class Database {
-	
-	private:
-	std::string _dbName;
-	std::vector <Table*> _tables;
-		
-	public:
-	Database(const TableDef& aTableDef);
-	~Database();
-	
-	void addTable(const std::string&, const std::string&);
-	
-	bool loadDBFromFile(const std::string&, const std::string&);
-
-	}; 
-
+ 
 }
 
 #endif

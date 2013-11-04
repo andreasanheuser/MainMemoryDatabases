@@ -41,35 +41,6 @@ namespace datastore {
       std::vector<ColumnDef> _columnDefs;
   };
 
-  /*
-   * Used to initialize new databases
-   */
-/*   class DatabaseDef {
-   	public:
-   		explicit DatabaseDef(const std::string& aDbName, const std::vector<TableDef>& aTableDefs);
-   		
-   		const std::string& getDbName() const { return _dbDefName; }
-   		const std::vector<TableDef>& getTableDefs() const { return _tableDefs; }
-   		
-   	private:
-   		std::string _dbDefName;
-   		std::vector<TableDef> _tableDefs;
-   	};
-*/
-  /*
-   * This still needs some rework...
-   */
-  class TPCH {
-    public:
-      TPCH();
-      const TableDef& getTableDef(const std::string& aTableName) const { return _tableDefs.find(aTableName)->second; }
-//       const DatabaseDef& getDatabaseDef(const std::string& aDatabaseName) const { return _databaseDefs.find(aDatabaseName)->second; }
-
-    private:
-      std::map<std::string, TableDef> _tableDefs;
-//       std::map<std::string, DatabaseDef> _databaseDefs;
-  };
-
 }
 
 #endif

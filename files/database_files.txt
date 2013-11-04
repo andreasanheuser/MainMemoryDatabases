@@ -1,4 +1,0 @@
-tpch@0_1
-/Users/florianpethig/Documents/UniMannheim/TP500/files/tpch@0_1.txt
-tpch@1
-/Users/florianpethig/Documents/UniMannheim/TP500/files/tpch@1.txt

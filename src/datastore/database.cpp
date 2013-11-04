@@ -1,11 +1,13 @@
 #include "database.h"
 #include "table.h"
 #include "../tools/measure.h"
+#include "tableSchema.h"
 
 #include <vector>
 #include <string>
 #include <sstream>
 #include <exception>
+#include <chrono>
 
 #include <iostream>
 #include <fstream>
@@ -13,58 +15,61 @@
 using namespace std;
 using namespace tools;
 
+double getFilesize(const std::string& aFilepath) 
+{
+  long begin_file, end_file;  
+  std::ifstream file_size (aFilepath);
+  begin_file = file_size.tellg();
+  file_size.seekg (0, ios::end);
+  end_file = file_size.tellg();
+  file_size.close();
+  return (end_file-begin_file)/1048576.00;
+}
+
 namespace datastore {
 
-		Database::Database(const DatabaseDef& aDatabaseDef)
-		: _dbName(aDatabaseDef.getDbName())
+		Database::Database(const std::string& aDatabaseName)
+		: _dbName(aDatabaseName)
 		{
-			for(auto t : aDatabaseDef.getTableDefs()){
-				_tables.push_back(new Table(t.getTableDef());
+		}
+		
+		Database::~Database()
+		{
+            for(auto t : _tables)
+            {
+                    delete t;
+            }
+        }
+	
+		bool Database::addTable(const TableDef& aTableDef)
+		{	
+			const TableDef &lTableDef = aTableDef;
+			_tables.push_back(new Table(lTableDef));
+			if (!_tables.empty())
+			{
+				return true;
 			}
-		}
-		
-		Database::~Database(){
-		  for (auto t : _tables) {
-  			  delete t;
-  			}
-		}
-
-		bool Database::loadDBFromFile(const std::string& adbName, const std::string& adbPath)
-		: _dbName(adbName)
-		{
-			std::vector <std::string> table;
-		  	cout << "Selected database: " << _dbName << endl;
-  			std::ifstream myfile (adbPath);
-         	if (myfile.is_open()) {
-         		string atableLine;
-    			while ( getline (myfile, atableLine) ){
-      	 			table.push_back(atableLine);
-    	 		}
-    	 	myfile.close();
-         	}
-  		 	else cout << "Unable to open file" << endl;
-  		 	
-  		 	for (unsigned i=0;i<table.size();i+=2)
-  		 		addTable(table[i],table[i+1]);
-		}
-
-		
-		void Database::addTable(const std::string& atableName, const std::string& atablePath){
-			TPCH lTpch;
-  			Table lt(lTpch.getTableDef(atableName));
-  			string lFile(atablePath);
-  			cout << "Table: " << atableName << endl;
-
-  			Measure lm;
-  			double lStart = lm.startMeasure();
-
-  			lt.loadDataFromFile(lFile);
-
-  			double lEnd = lm.endMeasure();
-
-  			lm.printMeasures(lStart, lEnd, lFile);
-  
-  			lt.printDataToScreen();
-  			
+			else
+			{
+				return false;
+			}
 		}	
+
+		void Database::loadDataIntoTable(const std::string& aTableName, const std::string& aTableContentPath)
+		{
+ 			std::cout << "Table: " << aTableName << std::endl;
+ 			
+ 			std::chrono::time_point<std::chrono::system_clock> startt, endt;
+  			startt = std::chrono::system_clock::now();
+ 			
+ 			_tables.back()->loadDataFromFile(aTableContentPath);
+ 			
+ 			endt = std::chrono::system_clock::now();
+  			int elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(endt-startt).count();
+  			
+  			std::cout << "Elapsed ms: " << elapsed_time << std::endl;
+  			std::cout << "Speed: " << getFilesize(aTableContentPath)/elapsed_time * 1000 << " MB/s" << std::endl;
+ 			
+ 			_tables.back()->printDataToScreen();
+		}
 }
