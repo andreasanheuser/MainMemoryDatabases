@@ -32,7 +32,7 @@ namespace datastore {
   class TableDef {
     public:
       explicit TableDef(const std::string& aTabName, const std::vector<ColumnDef>& aColumnDefs);
-
+      explicit TableDef(const std::string& aTabName, const std::string& aFilepath);
       const std::string& getTableName() const { return _tabName; }
       const std::vector<ColumnDef>& getColumnDefs() const { return _columnDefs; }
 
