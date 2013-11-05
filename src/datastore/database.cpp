@@ -1,30 +1,14 @@
-#include "database.h"
-#include "table.h"
-#include "../tools/measure.h"
-#include "tableSchema.h"
-
 #include <vector>
 #include <string>
-#include <sstream>
-#include <exception>
-#include <chrono>
-
 #include <iostream>
-#include <fstream>
+
+#include "database.h"
+#include "table.h"
+#include "tableSchema.h"
+#include "../tools/timer.h"
 
 using namespace std;
 using namespace tools;
-
-double getFilesize(const std::string& aFilepath) 
-{
-  long begin_file, end_file;  
-  std::ifstream file_size (aFilepath);
-  begin_file = file_size.tellg();
-  file_size.seekg (0, ios::end);
-  end_file = file_size.tellg();
-  file_size.close();
-  return (end_file-begin_file)/1048576.00;
-}
 
 namespace datastore {
 
@@ -58,18 +42,16 @@ namespace datastore {
 		void Database::loadDataIntoTable(const std::string& aTableName, const std::string& aTableContentPath)
 		{
  			std::cout << "Table: " << aTableName << std::endl;
- 			
- 			std::chrono::time_point<std::chrono::system_clock> startt, endt;
-  			startt = std::chrono::system_clock::now();
+
+                        tools::Timer timer;
+                        timer.start();
  			
  			_tables.back()->loadDataFromFile(aTableContentPath);
  			
- 			endt = std::chrono::system_clock::now();
-  			int elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(endt-startt).count();
+                        timer.stop();
   			
-  			std::cout << "Elapsed ms: " << elapsed_time << std::endl;
-  			std::cout << "Speed: " << getFilesize(aTableContentPath)/elapsed_time * 1000 << " MB/s" << std::endl;
+                        timer.printResults(aTableContentPath);
  			
- 			_tables.back()->printDataToScreen();
+ 			//_tables.back()->printDataToScreen();
 		}
 }
