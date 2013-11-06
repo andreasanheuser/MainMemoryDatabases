@@ -45,7 +45,7 @@ namespace datastore {
     timer.printResults(aTableContentPath);
 	
     // for testing only. use only with small tables as this will output a lot to screen
-//  _tables.back()->printDataToScreen();
+    //_tables.back()->printDataToScreen();
   }
 
 }

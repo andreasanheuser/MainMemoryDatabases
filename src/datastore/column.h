@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <exception>
+
 #include "tableSchema.h"
 
 class SimpleCharContainer;
@@ -36,6 +38,9 @@ namespace datastore {
       // returns the type of this column
       virtual ColumnDef::ColumnType getColumnType() const = 0;
 
+      // removes all elements from column
+      virtual void clear() = 0;
+
     protected:
       std::string _columnName;
   };
@@ -57,6 +62,8 @@ namespace datastore {
       ColumnDef::ColumnType getColumnType() const override { return _columnType; }
 
       void print(std::ostream& aOutputStream) const override;
+
+      void clear() override { _attrValues.clear(); };
 
       T operator[](const int aIndex) const { return _attrValues[aIndex]; }
 
@@ -81,6 +88,22 @@ namespace datastore {
 
     private:
       SimpleCharContainer* _textStorage;
+  };
+
+  class UnknownColumnTypeException : public std::exception {
+    public:
+      const char* what() const throw()
+      {
+        return "Unknown column type";
+      }
+  };
+
+  class ColumnInsertException : public std::exception {
+    public:
+      const char* what() const throw()
+      {
+        return "Inserting value into column failed";
+      }
   };
 }
 

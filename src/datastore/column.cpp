@@ -84,8 +84,11 @@ namespace datastore {
   template <typename T>
   void Column<T>::print(std::ostream& aOutputStream) const
   {
+    std::cout << "Column: " << _columnName << std::endl;
     for (auto a : _attrValues)
-      aOutputStream << a << ", " << std::endl; 
+      aOutputStream << a << "\n"; 
+
+    aOutputStream << std::endl;
   }
 
   std::ostream& operator<< (std::ostream& aOutputStream, const ColumnBase& aColumnBase)

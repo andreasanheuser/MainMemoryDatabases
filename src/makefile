@@ -1,5 +1,5 @@
 OBJDIR = ../obj
-OBJS = $(addprefix $(OBJDIR)/, main.o table.o column.o timer.o stringExtensions.o tableSchema.o datejd.o simplecharcontainer.o dbhandler.o database.o )
+OBJS = $(addprefix $(OBJDIR)/, main.o table.o column.o timer.o stringExtensions.o tableSchema.o datejd.o simplecharcontainer.o dbhandler.o database.o mmaphandle.o )
 OUT = database
 
 CC = g++
@@ -50,6 +50,8 @@ $(OBJDIR)/dbhandler.o: datastore/dbhandler.cpp datastore/database.h
 $(OBJDIR)/database.o: datastore/database.cpp datastore/table.h
 	$(CC) $(CFLAGS) datastore/database.cpp -o $(OBJDIR)/database.o
 
+$(OBJDIR)/mmaphandle.o: datastore/mmaphandle.cpp datastore/table.h
+	$(CC) $(CFLAGS) datastore/mmaphandle.cpp -o $(OBJDIR)/mmaphandle.o
 
 
 
