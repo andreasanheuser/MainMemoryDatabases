@@ -1,4 +1,7 @@
 #include <stdexcept>
+#include <cstdlib>
+#include <algorithm>
+
 #include "column.h"
 #include "simplecharcontainer.h"
 #include "datejd.h"
@@ -33,10 +36,10 @@ namespace datastore {
   }
 
   template <typename T>
-  bool Column<T>::insertValue(const std::string& aValue)
+  bool Column<T>::insertValue(char* str, char*& endptr)
   {
     try {
-      _attrValues.push_back(convertToColumnType(aValue));
+      _attrValues.push_back(convertToColumnType(str, endptr));
     }
     catch (const std::invalid_argument& ia) {
       return false;
@@ -44,91 +47,39 @@ namespace datastore {
     return true;
   }
 
-  template <typename T>
-  bool Column<T>::insertValue(const char* begin, const char* end)
-  {
-    try {
-      _attrValues.push_back(convertToColumnType(begin, end));
-    }
-    catch (const std::invalid_argument& ia) {
-      return false;
-    }
-    return true;
-  }
-
-  template <typename T>
-  T Column<T>::convertToColumnType(const std::string& aToken)
-  {
-    return aToken;
-  }
-
-  // template specialization to avoid usage of typeid
+  // template specifications to avoid runtime type checking
   template <>
-  int Column<int>::convertToColumnType(const std::string& aToken)
+  int Column<int>::convertToColumnType(char* str, char*& endptr)
   {
-    return std::stoi(aToken);
+    return std::strtol(str, &endptr, 10);
   }
 
   template <>
-  double Column<double>::convertToColumnType(const std::string& aToken)
+  double Column<double>::convertToColumnType(char* str, char*& endptr)
   {
-    return std::stod(aToken);
+    return std::strtod(str, &endptr);
   }
 
   template <>
-  char Column<char>::convertToColumnType(const std::string& aToken)
+  char Column<char>::convertToColumnType(char* str, char*& endptr)
   {
-    return aToken[0];
+    endptr = &str[1];
+    return str[0];
   }
 
   template <>
-  DateJd Column<DateJd>::convertToColumnType(const std::string& aToken)
+  DateJd Column<DateJd>::convertToColumnType(char* str, char*& endptr)
   {
-    std::vector<std::string> tokens = tools::tokenize(aToken, '-');
-    int lYear = std::stoi(tokens[0]);
-    int lMonth = std::stoi(tokens[1]);
-    int lDay = std::stoi(tokens[2]);
-    return DateJd{lYear, lMonth, lDay}; 
+    return DateJd{str, endptr};
   }
 
   template <>
-  const char* Column<const char*>::convertToColumnType(const std::string& aToken)
+  const char* Column<const char*>::convertToColumnType(char* str, char*& endptr)
   {
-    return aToken.c_str();
+    // this never gets called  - just needed for sucessfull compilation
+    return nullptr;
   }
-  // end of template specializations
-
-  // mmap stuff
-  template <>
-  int Column<int>::convertToColumnType(const char* begin, const char* end)
-  {
-    return std::stoi(std::string(begin, end-begin));
-  }
-
-  template <>
-  double Column<double>::convertToColumnType(const char* begin, const char* end)
-  {
-    return std::stod(std::string(begin, end-begin));
-  }
-
-  template <>
-  char Column<char>::convertToColumnType(const char* begin, const char* end)
-  {
-    return begin[0];
-  }
-
-  template <>
-  DateJd Column<DateJd>::convertToColumnType(const char* begin, const char* end)
-  {
-    return convertToColumnType(std::string(begin, end-begin));
-  }
-
-  template <>
-  const char* Column<const char*>::convertToColumnType(const char* begin, const char* end)
-  {
-    return std::string(begin, end-begin).c_str();
-  }
-  // end mmap stuff
+  // end template specifications
 
   template <typename T>
   void Column<T>::print(std::ostream& aOutputStream) const
@@ -159,15 +110,11 @@ namespace datastore {
     delete _textStorage;
   }
 
-  bool TextColumn::insertValue(const std::string& aValue)
+  bool TextColumn::insertValue(char* str, char*& endptr)
   {
-    _attrValues.push_back(_textStorage->insert(&(*aValue.begin()), &(*aValue.end())));
-    return true;
-  }
-
-  bool TextColumn::insertValue(const char* begin, const char* end)
-  {
-    _attrValues.push_back(_textStorage->insert(begin, end));
+    // TODO: fix search range
+    endptr = std::find(str, str + 1000, '|');
+    _attrValues.push_back(_textStorage->insert(str, endptr));
     return true;
   }
 

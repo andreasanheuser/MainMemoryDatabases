@@ -52,6 +52,6 @@ namespace datastore {
   			
                         timer.printResults(aTableContentPath);
  			
- 			//_tables.back()->printDataToScreen();
+// 			_tables.back()->printDataToScreen();
 		}
 }

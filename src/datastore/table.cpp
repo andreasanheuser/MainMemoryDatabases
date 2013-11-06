@@ -39,7 +39,6 @@ Table::Table(const TableDef& aTableDef)
         _columns.push_back(new Column<char>(c.getColumnName(), ColumnDef::ColumnType::FLAG));
         break;
       case ColumnDef::ColumnType::TEXT:
-//        _columns.push_back(new Column<const char*>(c.getColumnName(), ColumnDef::ColumnType::TEXT));
         _columns.push_back(new TextColumn(c.getColumnName(), 4096));
         break;
       case ColumnDef::ColumnType::DATE:
@@ -66,8 +65,10 @@ bool Table::loadDataFromFile(const std::string& aFd) {
     return false;
   }
 
+  // find out buffer size
   struct stat buffer;
-  int status = fstat(fd, &buffer);
+//  int status = fstat(fd, &buffer);
+  fstat(fd, &buffer);
 
   char* map = (char*)mmap(0, buffer.st_size, PROT_READ, MAP_SHARED, fd, 0);
 
@@ -77,20 +78,18 @@ bool Table::loadDataFromFile(const std::string& aFd) {
   }
 
   char* start = map;
-  char* end = nullptr;
+  char* end = map;
 
   int columnCount = _columns.size();
   int i{0};
 
   while (start < map + buffer.st_size) {
     // skip empty tokens at linebreak
-    if(i == columnCount) {
+    if (i == columnCount) {
       i = 0;
       start = end + 2;
       continue;
     }
-
-    end = std::find(start, map + buffer.st_size, '|');
 
     if(!_columns[i++]->insertValue(start, end)) {
       throw "Fileload failed"; //TODO: throw proper exceptions
@@ -139,14 +138,14 @@ bool Table::insertTuple(const std::string& aTuple, const char aDelim)
 }
 
 void Table::printDataToScreen() const {
-/*  
   std::cout << "Table: " << _tableName << ", Records: " << size() << std::endl;
   for (ColumnBase* b : _columns) {
     std::cout << (*b);
   }
   std::cout << std::endl;
-*/
+/*
   std::cout << "Records: " << size() << std::endl;
+  */
 }
 
 }

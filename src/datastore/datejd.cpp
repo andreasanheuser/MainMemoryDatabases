@@ -21,6 +21,21 @@ DateJd::DateJd(const std::string& s, bool aYearHigh, char sep) : _jd(0) {
   set(x, aYearHigh, sep);
 }
 
+DateJd::DateJd(const char* dateStr, char*& endptr) {
+  uint date[3];
+
+  for (auto i = 0; i < 3; ++i)
+  {
+    date[i] = strtol(dateStr, &endptr, 10);
+    ++endptr;
+    dateStr = endptr;
+  }
+
+  --endptr;
+  
+  _jd = ymd2jd(date[0], date[1], date[2]);
+}
+
 DateJd::uint
 DateJd::jdOfToday() {
   time_t c;

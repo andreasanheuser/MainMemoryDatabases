@@ -15,13 +15,17 @@ namespace datastore {
    */
   class ColumnBase {
     public:
-      ColumnBase(const std::string& aColumnName);
+      explicit ColumnBase(const std::string& aColumnName);
       virtual ~ColumnBase();
 
-      // inserts value at end of column
-      // converts string to type of specific column
-      virtual bool insertValue(const std::string& aValue) = 0;
-      virtual bool insertValue(const char* begin, const char* end) = 0;
+    private:
+      ColumnBase(const ColumnBase&) = delete;
+      ColumnBase& operator=(const ColumnBase&) = delete;
+
+    public:
+      // inserts value at end of column and converts char* to specific column type up to delimeter |
+      // end points to char one behind last converted char
+      virtual bool insertValue(char* str, char*& endptr) = 0;
 
       // returns the number of elements in this column
       virtual int size() const = 0;
@@ -34,9 +38,6 @@ namespace datastore {
 
     protected:
       std::string _columnName;
-
-      ColumnBase(const ColumnBase&) = delete;
-      ColumnBase& operator=(const ColumnBase&) = delete;
   };
 
   std::ostream& operator<< (std::ostream& aOutputStream, const ColumnBase& aColumnBase);
@@ -47,11 +48,10 @@ namespace datastore {
   template <typename T>
   class Column : public virtual ColumnBase {
     public:
-      Column(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType);
+      explicit Column(const std::string& aColumnName, const ColumnDef::ColumnType& aColumnType);
       ~Column();
 
-      virtual bool insertValue(const std::string& aValue) override;
-      virtual bool insertValue(const char* begin, const char* end) override;
+      bool insertValue(char* str, char*& endptr) override;
 
       int size() const override { return _attrValues.size(); }
       ColumnDef::ColumnType getColumnType() const override { return _columnType; }
@@ -62,8 +62,7 @@ namespace datastore {
 
     private:
       // converts string to type of specific column
-      static T convertToColumnType(const std::string& aToken);
-      static T convertToColumnType(const char* begin, const char* end);
+      static T convertToColumnType(char* str, char*& endptr);
 
     protected:
       std::vector<T> _attrValues;
@@ -75,11 +74,10 @@ namespace datastore {
    */
   class TextColumn : public Column<const char *> {
     public:
-      TextColumn(const std::string& aColumnName, unsigned aChunkSize);
+      explicit TextColumn(const std::string& aColumnName, unsigned aChunkSize);
       ~TextColumn();
 
-      bool insertValue(const std::string& aValue) override;
-      bool insertValue(const char* begin, const char* end);
+      bool insertValue(char* str, char*& endptr) override;
 
     private:
       SimpleCharContainer* _textStorage;

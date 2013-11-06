@@ -47,6 +47,7 @@ class DateJd {
     DateJd(uint); // ddmmyy for date after year 2000
     DateJd(int,int,int);
     DateJd(const std::string&, bool aYearHigh, char sep = ':');
+    DateJd(const char* dateStr, char*& endptr);
   public:
     inline uint julianDay() const { return _jd; }
     inline uint jd() const { return _jd; }
