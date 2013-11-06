@@ -1,0 +1,8 @@
+Lineitem;../schemata/tpch/tables/lineitem.txt;../content/tpch/lineitem.tbl
+Region;../schemata/tpch/tables/region.txt;../content/tpch/region.tbl
+Customer;../schemata/tpch/tables/customer.txt;../content/tpch/customer.tbl
+Nation;../schemata/tpch/tables/nation.txt;../content/tpch/nation.tbl
+Orders;../schemata/tpch/tables/orders.txt;../content/tpch/orders.tbl
+Part;../schemata/tpch/tables/part.txt;../content/tpch/part.tbl
+Partsupp;../schemata/tpch/tables/partsupp.txt;../content/tpch/partsupp.tbl
+Supplier;../schemata/tpch/tables/supplier.txt;../content/tpch/supplier.tbl

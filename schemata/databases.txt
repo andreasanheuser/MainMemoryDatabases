@@ -1,1 +1,1 @@
-TPCH;../schemata/TPCH/tpch.txt
+TPCH;../schemata/tpch/tpch.txt

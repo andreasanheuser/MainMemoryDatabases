@@ -17,3 +17,6 @@
 
 # Compiled program
 database
+
+# database content files
+*.tbl
