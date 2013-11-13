@@ -2,7 +2,7 @@ OBJDIR = ../obj
 OBJS = $(addprefix $(OBJDIR)/, main.o table.o column.o timer.o stringExtensions.o tableSchema.o datejd.o simplecharcontainer.o dbhandler.o database.o mmaphandle.o )
 OUT = database
 
-CC = g++
+CC = g++-4.8
 # for compilation under OSX - no longer needed with OSX 10.9
 #UNAME_S := $(shell uname -s)
 #ifeq ($(UNAME_S),Darwin)
