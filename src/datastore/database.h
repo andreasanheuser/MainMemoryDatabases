@@ -18,6 +18,8 @@ namespace datastore {
 
       bool addTable(const TableDef& aTableDef);
 	  void loadDataIntoTable(const std::string&, const std::string&);
+	  
+	  std::vector<Table*> get_tables(){ return _tables; }
     
     private:
       std::string _dbName;

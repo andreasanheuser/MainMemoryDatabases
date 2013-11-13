@@ -40,6 +40,7 @@ namespace datastore {
 
       // removes all elements from column
       virtual void clear() = 0;
+      
 
     protected:
       std::string _columnName;
@@ -66,6 +67,8 @@ namespace datastore {
       void clear() override { _attrValues.clear(); };
 
       T operator[](const int aIndex) const { return _attrValues[aIndex]; }
+      
+      std::vector<T> get_attrValues(){ return _attrValues; }
 
     private:
       // converts string to type of specific column
@@ -105,6 +108,7 @@ namespace datastore {
         return "Inserting value into column failed";
       }
   };
+
 }
 
 #endif

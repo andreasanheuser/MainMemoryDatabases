@@ -9,11 +9,11 @@ namespace physAlgebra{
     Top();
     ~Top();
 
-    int count();
-    datastore::table scan();
-    datastore::table scanSpecColumns();
+    //int count();
+    void scan(datastore::Table & aTable);
+    //datastore::Table scanSpecColumns();
   
-  }
+  };
 
 }
 

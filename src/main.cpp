@@ -17,4 +17,12 @@ int main(const int argc, const char * argv[]) {
 
   DBHandler dbHandler{lDatabaseDefinitions};
   return 0;
+  
+  
+  Database * database = dbhandler.get_databases();
+  
+  
+  
+  lt.scan
+  
 }

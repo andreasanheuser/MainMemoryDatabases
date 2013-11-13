@@ -20,6 +20,8 @@ namespace datastore {
       ~DBHandler();
 	
       void createDatabase(const std::string& afilePath);
+      
+      std::vector<Database*> get_databases(){ return _databases; }
 
   }; 
 

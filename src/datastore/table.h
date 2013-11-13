@@ -35,6 +35,9 @@ namespace datastore {
 
       // removes all data from table
       void clear();
+      
+      std::vector<ColumnBase*> get_columns(){ return _columns; }
+      
 
     private:
       std::string _tableName;
